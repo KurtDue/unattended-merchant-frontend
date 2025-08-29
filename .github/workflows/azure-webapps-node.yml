@@ -44,7 +44,7 @@ jobs:
     needs: build
     environment:
       name: 'Production'
-      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
+      url: https://unattended-merchant-prod.azurewebsites.net
 
     steps:
       - name: Download artifact from build job
@@ -53,10 +53,14 @@ jobs:
           name: node-app
           path: .
 
+      - name: Create deployment package
+        run: |
+          zip -r deploy.zip . -x "*.git*" "node_modules/*" "*.zip"
+
       - name: 'Deploy to Azure Web App'
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v3
         with:
-          app-name: ${{ env.AZURE_WEBAPP_NAME }}
+          app-name: unattended-merchant-prod
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE }}
-          package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+          package: deploy.zip
