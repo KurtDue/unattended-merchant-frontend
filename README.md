@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Unattended Merchant Frontend
 
 A Next.js-based frontend application for managing unattended retail stores with secure authentication, door access control, camera monitoring, and analytics.
@@ -259,3 +260,7 @@ For issues and questions:
 - Review deployment logs in Azure
 - Verify API connectivity
 - Check browser console for client-side errors
+=======
+# unattended-merchant-frontend
+Next.js frontend for unattended merchant portal with door access, cameras, and analytics
+>>>>>>> 53b55a3bc0d73e4be017f47a744361e4404829ef
