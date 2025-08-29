@@ -7,9 +7,9 @@ on:
   workflow_dispatch:
 
 env:
-  AZURE_WEBAPP_NAME: unattended-merchant-prod    # set this to your application's name
-  AZURE_WEBAPP_PACKAGE_PATH: '.'           # set this to the path to your web app project, defaults to the repository root
-  NODE_VERSION: '18.x'                     # set this to the node version to use
+  AZURE_WEBAPP_NAME: unattended-merchant-prod
+  AZURE_WEBAPP_PACKAGE_PATH: '.'
+  NODE_VERSION: '18'
 
 permissions:
   contents: read
@@ -17,7 +17,6 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v4
 
@@ -27,19 +26,16 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
 
-      - name: npm install, build, and test
+      - name: npm install and build
         run: |
           npm ci
-          npm run build --if-present
-
-      - name: Zip artifact for deployment
-        run: zip release.zip ./* -r
+          npm run build
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
           name: node-app
-          path: release.zip
+          path: .
 
   deploy:
     permissions:
@@ -55,15 +51,12 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: node-app
-
-      - name: Unzip artifact for deployment
-        run: unzip release.zip
+          path: .
 
       - name: 'Deploy to Azure Web App'
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v3
         with:
           app-name: ${{ env.AZURE_WEBAPP_NAME }}
-          slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE }}
           package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
