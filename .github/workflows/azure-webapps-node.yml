@@ -53,14 +53,9 @@ jobs:
           name: node-app
           path: .
 
-      - name: Create deployment package
-        run: |
-          zip -r deploy.zip . -x "*.git*" "node_modules/*" "*.zip"
-
       - name: 'Deploy to Azure Web App'
-        id: deploy-to-webapp
-        uses: azure/webapps-deploy@v3
+        uses: azure/webapps-deploy@v2
         with:
-          app-name: unattended-merchant-prod
+          app-name: ${{ env.AZURE_WEBAPP_NAME }}
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE }}
-          package: deploy.zip
+          package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
