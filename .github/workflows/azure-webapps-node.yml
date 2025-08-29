@@ -9,7 +9,7 @@ on:
 env:
   AZURE_WEBAPP_NAME: unattended-merchant-prod
   AZURE_WEBAPP_PACKAGE_PATH: '.'
-  NODE_VERSION: '18'
+  NODE_VERSION: '20'
 
 permissions:
   contents: read
